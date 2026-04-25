@@ -1,0 +1,40 @@
+# Binaries
+bin/
+dist/
+release/
+
+# Cache
+.cache/
+
+# Development
+*.svg
+*.log
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+docs/
+
+# CI/CD
+.github/
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Build
+Makefile

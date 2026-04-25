@@ -1,0 +1,118 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+
+    - name: Get tag name
+      id: tag
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Build all platforms
+      run: make build-all
+
+    - name: Create release archives
+      run: |
+        mkdir -p release
+
+        # Linux AMD64
+        tar -czf release/rootme-stats-linux-amd64.tar.gz -C dist rootme-server-linux-amd64 rootme-cli-linux-amd64 rootme-badges-linux-amd64
+
+        # Linux ARM64
+        tar -czf release/rootme-stats-linux-arm64.tar.gz -C dist rootme-server-linux-arm64 rootme-cli-linux-arm64 rootme-badges-linux-arm64
+
+        # Windows AMD64
+        zip -j release/rootme-stats-windows-amd64.zip dist/rootme-server-windows-amd64.exe dist/rootme-cli-windows-amd64.exe dist/rootme-badges-windows-amd64.exe
+
+        # macOS AMD64
+        tar -czf release/rootme-stats-darwin-amd64.tar.gz -C dist rootme-server-darwin-amd64 rootme-cli-darwin-amd64 rootme-badges-darwin-amd64
+
+        # macOS ARM64
+        tar -czf release/rootme-stats-darwin-arm64.tar.gz -C dist rootme-server-darwin-arm64 rootme-cli-darwin-arm64 rootme-badges-darwin-arm64
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        if [ -f CHANGELOG.md ]; then
+          # Extract changelog for this version
+          awk "/^## \[${{ steps.tag.outputs.TAG_NAME }}\]/{flag=1; next} /^## \[/{flag=0} flag" CHANGELOG.md > release_notes.md
+        else
+          echo "Release ${{ steps.tag.outputs.TAG_NAME }}" > release_notes.md
+          echo "" >> release_notes.md
+          echo "### Changes" >> release_notes.md
+          git log --oneline $(git describe --tags --abbrev=0 HEAD~1)..HEAD >> release_notes.md
+        fi
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.TAG_NAME }}
+        release_name: Release ${{ steps.tag.outputs.TAG_NAME }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+
+    - name: Upload Linux AMD64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/rootme-stats-linux-amd64.tar.gz
+        asset_name: rootme-stats-linux-amd64.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload Linux ARM64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/rootme-stats-linux-arm64.tar.gz
+        asset_name: rootme-stats-linux-arm64.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload Windows AMD64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/rootme-stats-windows-amd64.zip
+        asset_name: rootme-stats-windows-amd64.zip
+        asset_content_type: application/zip
+
+    - name: Upload macOS AMD64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/rootme-stats-darwin-amd64.tar.gz
+        asset_name: rootme-stats-darwin-amd64.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload macOS ARM64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/rootme-stats-darwin-arm64.tar.gz
+        asset_name: rootme-stats-darwin-arm64.tar.gz
+        asset_content_type: application/gzip

@@ -1,0 +1,29 @@
+<svg width="380" height="160" viewBox="0 0 380 160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .text-title { fill: #ffffff; font: 600 18px 'Segoe UI', sans-serif; }
+      .text-normal { fill: #ffffff; font: 400 14px 'Segoe UI', sans-serif; }
+      .text-small { fill: #ffffff; font: 400 12px 'Segoe UI', sans-serif; }
+      .icon { fill: #91B302; }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes progressFill {
+        from { width: 0; }
+        to { width: var(--progress); }
+      }
+
+      .animated { animation: fadeIn 0.8s ease-in-out; }
+      .progress-bar { animation: progressFill 1.2s ease-out; }
+    </style>
+  </defs>
+<rect width="100%" height="100%" rx="8" fill="#000000" />
+  <g class="animated">
+    <text x="20" y="35" class="text-title">Root-me Stats</text>
+    <text x="20" y="55" class="text-normal">@franckferman</text>
+    <text x="20" y="75" class="text-small">Rank: 0 • Score: 0</text>
+  </g>
+<rect width="100%" height="100%" rx="8" fill="none" stroke="#2A3609" stroke-width="1" /></svg>
