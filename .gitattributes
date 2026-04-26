@@ -1,0 +1,60 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Go source files
+*.go text diff=golang
+
+# Web assets
+*.html text diff=html
+*.css text
+*.js text
+
+# SVG files (treat as text for diffs)
+*.svg text
+
+# Documentation
+*.md text diff=markdown
+*.txt text
+
+# Configuration files
+*.json text
+*.yaml text
+*.yml text
+*.toml text
+*.ini text
+
+# Scripts
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Binary files
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+
+# Archive files
+*.zip binary
+*.tar binary
+*.gz binary
+*.tgz binary
+
+# Go specific
+go.mod text
+go.sum text
+Dockerfile text
+Makefile text
+
+# GitHub specific
+.gitignore text
+.gitattributes text
+LICENSE text
+README.md text diff=markdown

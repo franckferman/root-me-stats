@@ -211,22 +211,11 @@ make build-all  # Linux, Windows, macOS (Intel + ARM)
 
 ### Badge Themes
 
-All themes shown with real data from Root-me:
-
-| Theme | Preview | Description |
-|-------|---------|-------------|
-| `dark` | ![Dark Badge](assets/examples/badge-dark.svg) | Default dark theme |
-| `light` | ![Light Badge](assets/examples/badge-light.svg) | Clean light theme |
-| `midnight` | ![Midnight Badge](assets/examples/badge-midnight.svg) | Deep blue theme |
-| `punk` | ![Punk Badge](assets/examples/badge-punk.svg) | Pink cyberpunk theme |
-| `weedy` | ![Weedy Badge](assets/examples/badge-weedy.svg) | Green hacker theme |
-| `astral` | ![Astral Badge](assets/examples/badge-astral.svg) | Red space theme |
+Available themes: `dark`, `light`, `midnight`, `punk`, `weedy`, `astral`
 
 ### Profile Comparison
 
-Compare two Root-me profiles side by side:
-
-![Profile Comparison](assets/examples/compare-example.svg)
+Compare two Root-me profiles side by side using the `/compare` endpoint.
 
 ## Go Library Usage
 
